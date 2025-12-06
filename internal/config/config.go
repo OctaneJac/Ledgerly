@@ -5,16 +5,21 @@ import (
 )
 
 type Config struct {
-	Port        string
-	DatabaseURL string
+	DBUser string
+	DBPass string
+	DBName string
+	DBHost string
+	DBPort string
 }
 
-func Load() (*Config, error) {
-	cfg := &Config{
-		Port:        getEnv("PORT", "8080"),
-		DatabaseURL: getEnv("DATABASE_URL", "postgres://user:pass@localhost:5432/ledger?sslmode=disable"),
+func Load() Config {
+	return Config{
+		DBUser: os.Getenv("DB_USER"),
+		DBPass: os.Getenv("DB_PASS"),
+		DBName: os.Getenv("DB_NAME"),
+		DBHost: os.Getenv("DB_HOST"),
+		DBPort: os.Getenv("DB_PORT"),
 	}
-	return cfg, nil
 }
 
 func getEnv(key, fallback string) string {

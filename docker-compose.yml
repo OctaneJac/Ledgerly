@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: ledger-db
+    environment:
+      POSTGRES_USER: ledger
+      POSTGRES_PASSWORD: ledgerpass
+      POSTGRES_DB: ledgerdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ledger-net
+
+  api:
+    build: ./cmd/api
+    container_name: ledger-api
+    depends_on:
+      - db
+    environment:
+      DB_USER: ledger
+      DB_PASS: ledgerpass
+      DB_NAME: ledgerdb
+      DB_HOST: db
+      DB_PORT: 5432
+    ports:
+      - "8080:8080"
+    networks:
+      - ledger-net
+
+volumes:
+  postgres_data:
+
+networks:
+  ledger-net:
