@@ -1,4 +1,4 @@
-FROM golang:1.23 AS builder
+FROM golang:1.25.5 AS builder
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY . .
 
 RUN go build -o api ./cmd/api
 
-FROM gcr.io/distroless/base-debian12
+# FROM gcr.io/distroless/base-debian12
 
 WORKDIR /
 COPY --from=builder /app/api /api

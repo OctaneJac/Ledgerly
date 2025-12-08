@@ -2,10 +2,11 @@ package main
 
 import (
 	"log"
+	"net/http"
 
-	"your/module/internal/api"
-	"your/module/internal/config"
-	"your/module/internal/store"
+	"github.com/octanejac/Ledgerly/internal/api"
+	"github.com/octanejac/Ledgerly/internal/config"
+	"github.com/octanejac/Ledgerly/internal/store"
 )
 
 func main() {
@@ -15,8 +16,10 @@ func main() {
 	if err != nil {
 		log.Fatal("DB error:", err)
 	}
-
 	r := api.NewRouter(db)
 
-	r.Run(":8080")
+	if err := http.ListenAndServe(":8080", r); err != nil {
+		log.Fatal("Server error:", err)
+	}
 }
+
